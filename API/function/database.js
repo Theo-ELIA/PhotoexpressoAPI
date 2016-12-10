@@ -4,8 +4,11 @@ var pg = require('pg');
 module.exports =
 {
 
-	connect : function(sqlQuery,callback)
+	connect : function(sqlQuery,callback,arrayParameters)
 	{
+		if(!arrayParameters) {
+			arrayParameters = [];
+		}
 		var pool = new pg.Pool(global.SQLconfig);
 		pool.connect(function(err, client, done) {
 
@@ -13,12 +16,12 @@ module.exports =
 		    return console.error('error fetching client from pool', err);
 		  }
 
-		  client.query(sqlQuery,function(err, result) {
+		  client.query(sqlQuery,arrayParameters,function(err, result) {
 			    //call `done()` to release the client back to the pool 
 			    done();
 			 
 			    if(err) {
-			    	console.error('error runnin SQL Query :'+ sqlQuery, err);
+					console.error('error running SQL Query :'+ sqlQuery, err);
 			    }
 			    callback(err,result);
 	  	});
