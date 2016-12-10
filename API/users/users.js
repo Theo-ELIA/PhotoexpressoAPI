@@ -23,8 +23,9 @@ router.get('/connection',function(req,res)
 
 router.get('/listOrders',function(req,res)
 {
-	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchase_per_adress pa JOIN adress ON pa.shipping_adress_id = adress.id JOIN exemplary_quantity eq ON eq.purchase_id = pa.id JOIN purchase_historic ph ON pa.global_purchase_id = ph.id WHERE pa.customer_id = 1";
-	database.connect(query, function(req, res)) {
+	var user_id = [1]
+	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchase_per_adress pa JOIN adress ON pa.shipping_adress_id = adress.id JOIN exemplary_quantity eq ON eq.purchase_id = pa.id JOIN purchase_historic ph ON pa.global_purchase_id = ph.id WHERE pa.customer_id = $1";
+	database.connect(query, function(req, res), user_id) {
 		if(err)
 		{
 			res.json({error:true});
@@ -36,8 +37,9 @@ router.get('/listOrders',function(req,res)
 
 router.get('/validationMail',function(req,res)
 {
-	var query = "SELECT mail FROM customer WHERE mail = test@test.com";
-	database.connect(query, function(req, res)) {
+	var query = "SELECT mail FROM customer WHERE mail = $1";
+	var email = ["test@test.com"];
+	database.connect(query, function(req, res), email) {
 		if(err)
 		{
 			res.json({error:true});
@@ -59,8 +61,9 @@ router.get('/modifyAccount',function(req,res)
 
 router.get('/AdressList',function(req,res)
 {
-	var query = 'SELECT last_name, first_name, street_adress, postal_code, city, gender FROM contact_list cl LEFT JOIN adress ON cl.shipping_adress_id = adress.id WHERE cl.user_id = 1';
-	database.connect(query, function(req, res)) {
+	var user_id = [1]
+	var query = 'SELECT last_name, first_name, street_adress, postal_code, city, gender FROM contact_list cl LEFT JOIN adress ON cl.shipping_adress_id = adress.id WHERE cl.user_id = $1';
+	database.connect(query, function(req, res), user_id) {
 		if(err)
 		{
 			res.json({error:true});
