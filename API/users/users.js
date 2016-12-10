@@ -36,6 +36,14 @@ router.get('/listOrders',function(req,res)
 
 router.get('/validationMail',function(req,res)
 {
+	var query = "SELECT mail FROM customer WHERE mail = test@test.com";
+	database.connect(query, function(req, res)) {
+		if(err)
+		{
+			res.json({error:true});
+		}
+		res.json({result.rows});
+	}
 	res.send('validationMail !')
 });
 
