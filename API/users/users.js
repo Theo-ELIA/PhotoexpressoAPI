@@ -31,7 +31,7 @@ router.get('/listOrders',function(req,res)
 		}
 		res.json({result.rows});
 	}
-	res.send('list Orders !')
+	res.send('listOrders !')
 });
 
 router.get('/validationMail',function(req,res)
