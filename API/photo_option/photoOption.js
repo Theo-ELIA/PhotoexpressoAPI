@@ -1,0 +1,61 @@
+"use strict";
+var express = require('express');
+var jwt = require('jsonwebtoken');
+var database = require('../function/database');
+
+
+//We import the files we need
+var router = express.Router() //This variable represent the routing of our application
+
+
+
+router.get('/',function(req,res){
+	res.send('Welcome to users API')
+})
+
+router.get('/listFilters',function(req,res)
+{
+	var query = "SELECT * FROM filter";
+	database.connect(query, function(req, res)) {
+		if(err)
+		{
+			res.json({error:true});
+		}
+		res.json({result.rows});
+	}
+	res.send('listFilters !')
+});
+
+outer.get('/',function(req,res){
+	res.send('Welcome to users API')
+})
+
+router.get('/listFormat',function(req,res)
+{
+	var query = "SELECT * FROM format";
+	database.connect(query, function(req, res)) {
+		if(err)
+		{
+			res.json({error:true});
+		}
+		res.json({result.rows});
+	}
+	res.send('listFormat !')
+});
+
+outer.get('/',function(req,res){
+	res.send('Welcome to users API')
+})
+
+router.get('/listFormatAvailable',function(req,res)
+{
+	var query = "SELECT * FROM format";
+	database.connect(query, function(req, res)) {
+		if(err)
+		{
+			res.json({error:true});
+		}
+		res.json({result.rows});
+	}
+	res.send('listFormatAvailable !')
+});
