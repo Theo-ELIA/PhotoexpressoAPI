@@ -55,3 +55,5 @@ router.get('/listFormatAvailable',function(req,res)
 		res.json({result.rows});
 	}
 });
+
+module.exports = router;
