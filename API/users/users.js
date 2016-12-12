@@ -19,15 +19,22 @@ router.get('/connection',function(req,res)
 	//console.log(decoded.id)
 
 		var query = "SELECT * FROM user.customers WHERE mail = $1 AND password = $2";
-	database.connect(query, function(req, res), [mail,password]) {
+	database.connect(query, function(req, res){
 		if(err)
 		{
 			res.json({error:true});
 		}
-		var token = jwt.sign({ id: result.rows.id }, global.PRIVATE_KEY);
-		res.json(token);
+		if(result.rows.length == 1)
+		{
+			var token = jwt.sign({ id: result.rows.id }, global.PRIVATE_KEY);
+			res.json(token);
+		}
+		else
+		{
+			res.json({error:true});
+		}
 
-	}
+	}, [mail,password]);
 
 });
 
