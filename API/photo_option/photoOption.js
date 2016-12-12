@@ -23,11 +23,9 @@ router.get('/listFilters',function(req,res)
 		}
 		res.json({result.rows});
 	}
-	res.send('listFilters !')
 });
 
 outer.get('/',function(req,res){
-	res.send('Welcome to users API')
 })
 
 router.get('/listFormat',function(req,res)
@@ -40,10 +38,9 @@ router.get('/listFormat',function(req,res)
 		}
 		res.json({result.rows});
 	}
-	res.send('listFormat !')
 });
 
-outer.get('/',function(req,res){
+router.get('/',function(req,res){
 	res.send('Welcome to users API')
 })
 
@@ -57,5 +54,4 @@ router.get('/listFormatAvailable',function(req,res)
 		}
 		res.json({result.rows});
 	}
-	res.send('listFormatAvailable !')
 });

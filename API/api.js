@@ -11,9 +11,13 @@ global.SQLconfig = {
 	  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed 
 };
 //We import the files we need
+var photoOptionPath = require('./photo_option/photoOption');
 var usersPath = require('./users/users');
+
 var router = express.Router() //This variable represent the routing of our application
 router.use('/users/',usersPath);
+router.use('/photo_option/',photoOptionPath);
+
 
 
 router.get('/',function(req,res){

@@ -49,7 +49,6 @@ router.get('/listOrders',function(req,res)
 		}
 		res.json({result.rows});
 	}
-	res.send('listOrders !')
 });
 
 router.get('/validationMail',function(req,res)
@@ -63,7 +62,6 @@ router.get('/validationMail',function(req,res)
 		}
 		res.json({result.rows});
 	}
-	res.send('validationMail !')
 });
 
 router.get('/createAccount',function(req,res)
