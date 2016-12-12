@@ -15,10 +15,20 @@ router.get('/',function(req,res){
 
 router.get('/connection',function(req,res)
 {
-	var token = jwt.sign({ id: 1 }, global.PRIVATE_KEY);
-	var decoded = jwt.verify(token,global.PRIVATE_KEY);
-	console.log(decoded.id) // bar 
-	res.send('connection'+token)
+	//var decoded = jwt.verify(token,global.PRIVATE_KEY);
+	//console.log(decoded.id)
+
+		var query = "SELECT * FROM user.customers WHERE mail = $1 AND password = $2";
+	database.connect(query, function(req, res), [mail,password]) {
+		if(err)
+		{
+			res.json({error:true});
+		}
+		var token = jwt.sign({ id: result.rows.id }, global.PRIVATE_KEY);
+		res.json(token);
+
+	}
+
 });
 
 router.get('/listOrders',function(req,res)
