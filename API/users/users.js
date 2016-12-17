@@ -55,7 +55,7 @@ router.get('/validationMail',function(req,res)
 {
 	var query = "SELECT mail FROM customer WHERE mail = $1";
 	var email = ["test@test.com"];
-	database.connect(query, function(req, result) {
+	database.connect(query, function(err,result) {
 		if(err)
 		{
 			res.json({error:true});
