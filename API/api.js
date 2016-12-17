@@ -13,15 +13,16 @@ global.SQLconfig = {
 //We import the files we need
 var photoOptionPath = require('./photo_option/photoOption');
 var usersPath = require('./users/users');
+var purchasePath = require('./purchase/purchase');
 
 var router = express.Router() //This variable represent the routing of our application
 router.use('/users/',usersPath);
 router.use('/photo_option/',photoOptionPath);
-
+router.use('/purchase/',purchasePath);
 
 
 router.get('/',function(req,res){
-	res.send('Welcome to users')
+	res.send('Welcome to photoexpressoAPI')
 })
 
 
