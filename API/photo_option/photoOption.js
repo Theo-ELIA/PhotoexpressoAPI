@@ -21,7 +21,9 @@ router.get('/listFilters',function(req,res)
 		{
 			res.json({error:true});
 		}
-		res.json(result.rows);
+		else {
+			res.json(result.rows);
+		}
 	}
 )});
 
@@ -33,11 +35,12 @@ router.get('/listFormat',function(req,res)
 {
 	var query = "SELECT * FROM format";
 	database.connect(query, function(err, result) {
-		if(err)
-		{
+		if(err) {
 			res.json({error:true});
 		}
-		res.json(result.rows);
+		else {
+			res.json(result.rows);
+		}
 	});
 });
 
@@ -49,11 +52,12 @@ router.get('/listFormatAvailable',function(req,res)
 {
 	var query = "SELECT * FROM format";
 	database.connect(query, function(err,result) {
-		if(err)
-		{
+		if(err) {
 			res.json({error:true});
 		}
-		res.json(result.rows);
+		else {
+			res.json(result.rows);
+		}
 	});
 });
 
