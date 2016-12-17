@@ -47,21 +47,25 @@ router.get('/listOrders',function(req,res)
 		{
 			res.json({error:true});
 		}
-		res.json(result.rows);
+		else {
+			res.json(result.rows);
+		}
 	}, user_id);
 });
 
 router.get('/validationMail',function(req,res)
 {
-	var query = "SELECT mail FROM customer WHERE mail = $1";
-	var email = ["test@test.com"];
+	var query = "SELECT mail FROM users.customers WHERE mail = $1";
+	var email = "test@test.com";
 	database.connect(query, function(err,result) {
-		if(err)
-		{
+		if(err) {
 			res.json({error:true});
 		}
-		res.json(result.rows);
-	}, email)
+		else {
+			res.json(result.rows);
+		}
+
+	}, [email])
 });
 
 router.get('/createAccount',function(req,res)
@@ -83,7 +87,9 @@ router.get('/AdressList',function(req,res)
 		{
 			res.json({error:true});
 		}
+		else {
 		res.json(result.rows);
+		}
 	}, user_id);
 });
 
@@ -100,7 +106,9 @@ router.get('/listUsers',function(req,res)
 		{
 			res.json({error : true});
 		}
+		else {
 		res.json(result.rows);
+		}
 	});
 });
 
