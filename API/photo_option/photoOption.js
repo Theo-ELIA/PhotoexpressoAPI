@@ -16,7 +16,7 @@ router.get('/',function(req,res){
 router.get('/listFilters',function(req,res)
 {
 	var query = "SELECT * FROM filter";
-	database.connect(query, function(req, res) {
+	database.connect(query, function(err, result) {
 		if(err)
 		{
 			res.json({error:true});
@@ -32,7 +32,7 @@ router.get('/',function(req,res){
 router.get('/listFormat',function(req,res)
 {
 	var query = "SELECT * FROM format";
-	database.connect(query, function(req, res) {
+	database.connect(query, function(err, result) {
 		if(err)
 		{
 			res.json({error:true});
@@ -48,7 +48,7 @@ router.get('/',function(req,res){
 router.get('/listFormatAvailable',function(req,res)
 {
 	var query = "SELECT * FROM format";
-	database.connect(query, function(req, res) {
+	database.connect(query, function(err,result) {
 		if(err)
 		{
 			res.json({error:true});
