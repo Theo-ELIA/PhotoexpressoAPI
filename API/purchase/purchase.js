@@ -16,7 +16,7 @@ router.get('/',function(req,res){
 router.post('/new',function(req,res)
 {
 	var purchase = [1, new Date(), []];
-	var query = "INSERT INTO purchase_historic (customer_id, date_purchase) VALUES ($1, $2)";
+	var query = "INSERT INTO purchase.purchase_historic (customer_id, date_purchase) VALUES ($1, CURRENT_TIME)";
 	database.connect(query, function(err, result) {
 		if(err)
 		{

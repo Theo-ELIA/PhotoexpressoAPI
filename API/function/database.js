@@ -36,7 +36,5 @@ module.exports =
 			// and so you might want to handle it and at least log it out 
 			console.error('idle client error', err.message, err.stack)
 		})
-		
 	}
-
 }
