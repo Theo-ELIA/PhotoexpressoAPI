@@ -42,8 +42,8 @@ router.post('/new',function(req,res)
 
 router.get('/listOrders',function(req,res)
 {
-	var user_id = [4];
-	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchases.orders WHERE customer_id = $1";
+	var user_id = 4;
+	var query = "SELECT * FROM purchases.orders WHERE customer_id = $1";
 	database.connect(query, function(err, result) {
 		if(err)
 		{
