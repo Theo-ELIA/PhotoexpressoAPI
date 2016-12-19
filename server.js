@@ -10,7 +10,7 @@ var apiProxy = httpProxy.createProxyServer();//We import the file we need
 
 
 
-var port = 8080
+var port = 80
 var hostname = '192.168.11.112';
 var allhostname = '0.0.0.0';
 
