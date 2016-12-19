@@ -16,10 +16,7 @@ router.get('/',function(req,res){
 router.post('/new',function(req,res)
 {
 	var purchase = [1, new Date(), []];
-<<<<<<< HEAD
 	var query = "INSERT INTO purchase.purchase_historic (customer_id, date_purchase) VALUES ($1, CURRENT_TIME)";
-=======
-	var query = "INSERT INTO purchase_historic (customer_id, date_purchase) VALUES ($1, $2)";
 	//var decoded = jwt.verify(token,global.PRIVATE_KEY);
 	//console.log(decoded.id)
 
@@ -39,7 +36,7 @@ router.post('/new',function(req,res)
 			res.json({error:true});
 		}
 
-	}, [mail,password]);
+	}, [req.param.mail,req.param.password]);
 
 });
 
@@ -60,7 +57,6 @@ router.get('/validationMail',function(req,res)
 {
 	var query = "SELECT mail FROM customer WHERE mail = $1";
 	var email = ["test@test.com"];
->>>>>>> 2dbbdf12e717ebd3d25c0fa94ebede013deeb2dc
 	database.connect(query, function(err, result) {
 		if(err)
 		{
