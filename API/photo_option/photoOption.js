@@ -33,7 +33,7 @@ router.get('/',function(req,res){
 
 router.get('/listFormat',function(req,res)
 {
-	var query = "SELECT * FROM photo_options.format";
+	var query = "SELECT * FROM format";
 	database.connect(query, function(err, result) {
 		if(err) {
 			res.json({error:true});
@@ -47,7 +47,7 @@ router.get('/listFormat',function(req,res)
 
 router.get('/listFormatAvailable',function(req,res)
 {
-	var query = "SELECT * FROM photo_options.format f RIGHT JOIN photo_options.incompatibility i ON f.format_id = i.format_id WHERE i.format_id <> $1";
+	var query = "SELECT * FROM photo_options.format";
 	database.connect(query, function(err,result) {
 		if(err) {
 			res.json({error:true});
@@ -55,22 +55,29 @@ router.get('/listFormatAvailable',function(req,res)
 		else {
 			res.json(result.rows);
 		}
-	}, [req.param.format_id]);
+	});
 });
 
 router.post('/formatAdd', function(req, res)
 {
-	var query = "INSERT INTO photo_options.format (format_name, format_price) VALUES ($1,$2)";
-	database.connect(query, function(err,result) {
-		if(err)
-		{
-			res.json({error:true});
-		}
-		res.json(result.rows);
-	}, [req.param.format_name,req.param.format_price]);
+	if(!req.params._name || !req.params.format_price)
+	{
+		var query = "INSERT INTO format (format_name, format_price) VALUES ($1,$2)";
+		database.connect(query, function(err,result) {
+			if(err)
+			{
+				res.json({error:true});
+			}
+			res.json(result.rows);
+		}, [req.params.format_name,req.params.format_price]);
+	}
+	else
+	{
+		res.json({error:true,error_msg:"Suffisent parameters weren't not supplied"})
+	}
 });
 
-router.get('/filterAdd',function(req,res)
+router.post('/filterAdd',function(req,res)
 {
 	var query = "INSERT INTO photo_options.filter (filter_name, filter_price) VALUES ( $1 , $2 )";
 	database.connect(query, function(err,result) {
@@ -80,19 +87,7 @@ router.get('/filterAdd',function(req,res)
 		else {
 			res.json(result.rows);
 		}
-	},[req.param.filter_name,req.param.filter_price]);
-});
-
-router.post('/addIncompatibility', function(req, res)
-{
-	var query = "INSERT INTO photo_options.incompatibility (id_filter, id_format) VALUES ($1, $2)";
-	database.connect(query, function(err,result) {
-		if(err)
-		{
-			res.json({error:true});
-		}
-		res.json(result.rows);
-	}, [req.param.filter_id,req.param.format_id]);
+	},[req.params.filter_name,req.params.filter_price]);
 });
 
 module.exports = router;

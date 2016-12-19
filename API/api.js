@@ -16,9 +16,15 @@ var usersPath = require('./users/users');
 var purchasePath = require('./purchase/purchase');
 
 var router = express.Router() //This variable represent the routing of our application
+router.use(function (req, res, next) {
+	if(req.params) {
+		console.log(req.params);
+	}
+	next()
+})
 router.use('/users/',usersPath);
-router.use('/photo_option/',photoOptionPath);
-router.use('/purchase/',purchasePath);
+router.use('/photo_options/',photoOptionPath);
+router.use('/purchases/',purchasePath);
 
 
 router.get('/',function(req,res){
