@@ -49,7 +49,9 @@ router.get('/listOrders',function(req,res)
 		{
 			res.json({error:true});
 		}
-		res.json(result.rows);
+		{
+				res.json(result.rows);	
+		}
 	}, user_id);
 });
 
