@@ -16,11 +16,11 @@ router.get('/',function(req,res){
 router.post('/new',function(req,res)
 {
 	var purchase = [1, new Date(), []];
-	var query = "INSERT INTO purchase.purchase_historic (customer_id, date_purchase) VALUES ($1, CURRENT_TIME)";
+	var query = "INSERT INTO purchases.purchase_historic (customer_id, date_purchase) VALUES ($1, CURRENT_TIME)";
 	//var decoded = jwt.verify(token,global.PRIVATE_KEY);
 	//console.log(decoded.id)
 
-		var query = "SELECT * FROM user.customers WHERE mail = $1 AND password = $2";
+		var query = "SELECT * FROM users.customers WHERE mail = $1 AND password = $2";
 	database.connect(query, function(req, res){
 		if(err)
 		{
@@ -43,7 +43,7 @@ router.post('/new',function(req,res)
 router.get('/listOrders',function(req,res)
 {
 	var user_id = [4];
-	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchase.orders WHERE customer_id = $1";
+	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchases.orders WHERE customer_id = $1";
 	database.connect(query, function(err, result) {
 		if(err)
 		{
