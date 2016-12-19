@@ -49,6 +49,7 @@ router.get('/listOrders',function(req,res)
 		{
 			res.json({error:true});
 		}
+		else
 		{
 				res.json(result.rows);	
 		}
