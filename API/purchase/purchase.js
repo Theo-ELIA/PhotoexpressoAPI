@@ -42,7 +42,7 @@ router.post('/new',function(req,res)
 
 router.get('/listOrders',function(req,res)
 {
-	var user_id = 4;
+	var user_id = [4];
 	var query = "SELECT * FROM purchases.orders WHERE customer_id = $1";
 	database.connect(query, function(err, result) {
 		if(err)
@@ -53,39 +53,8 @@ router.get('/listOrders',function(req,res)
 		{
 			res.json(result.rows);	
 		}
-	}, [user_id]);
+	}, user_id);
 });
-
-/*
-router.get('/validationMail',function(req,res)
-{
-	var query = "SELECT mail FROM users.customers WHERE mail = $1";
-	var email = "test@test.com";
-	database.connect(query, function(err,result) {
-		if(err) {
-			res.json({error:true});
-		}
-		else {
-			res.json(result.rows);
-		}
-
-	}, [email])
-});
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
