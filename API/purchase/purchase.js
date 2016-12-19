@@ -16,7 +16,7 @@ router.get('/',function(req,res){
 router.post('/new',function(req,res)
 {
 	var purchase = [1, new Date(), []];
-	var query = "INSERT INTO purchase_historic (customer_id, date_purchase) VALUES ($1, $2)";
+	var query = "INSERT INTO purchase.purchase_historic (customer_id, date_purchase) VALUES ($1, CURRENT_TIME)";
 	//var decoded = jwt.verify(token,global.PRIVATE_KEY);
 	//console.log(decoded.id)
 
@@ -36,7 +36,7 @@ router.post('/new',function(req,res)
 			res.json({error:true});
 		}
 
-	}, [mail,password]);
+	}, [req.param.mail,req.param.password]);
 
 });
 
