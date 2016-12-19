@@ -10,7 +10,7 @@ var router = express.Router() //This variable represent the routing of our appli
 
 
 router.get('/',function(req,res){
-	res.send('Welcome to users API')
+	res.send('Welcome to photoOption API')
 })
 
 router.get('/listFilters',function(req,res)
@@ -44,9 +44,6 @@ router.get('/listFormat',function(req,res)
 	});
 });
 
-router.get('/',function(req,res){
-	res.send('Welcome to users API')
-})
 
 router.get('/listFormatAvailable',function(req,res)
 {
@@ -59,6 +56,19 @@ router.get('/listFormatAvailable',function(req,res)
 			res.json(result.rows);
 		}
 	});
+});
+
+router.post('/formatAdd', function(req, res)
+{
+	var newFormat = [];
+	var query = "INSERT INTO format (format_name, format_price) VALUES $1";
+	database.connect(query, function(err,result) {
+		if(err)
+		{
+			res.json({error:true});
+		}
+		res.json(result.rows);
+	}, newFormat);
 });
 
 module.exports = router;
