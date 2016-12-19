@@ -10,7 +10,7 @@ var router = express.Router() //This variable represent the routing of our appli
 
 
 router.get('/',function(req,res){
-	res.send('Welcome to users API')
+	res.send('Welcome to purchase API')
 })
 
 router.post('/new',function(req,res)
@@ -42,7 +42,7 @@ router.post('/new',function(req,res)
 
 router.get('/listOrders',function(req,res)
 {
-	var user_id = [1];
+	var user_id = [4];
 	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchase.orders WHERE customer_id = $1";
 	database.connect(query, function(err, result) {
 		if(err)
