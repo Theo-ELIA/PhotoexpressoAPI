@@ -47,7 +47,7 @@ router.get('/listFormat',function(req,res)
 
 router.get('/listFormatAvailable',function(req,res)
 {
-	var query = "SELECT * FROM photo_options.format";
+	var query = "SELECT * FROM photo_options.format f RIGHT JOIN photo_options.incompatibility i ON f.format_id = i.format_id WHERE i.format_id <> $1";
 	database.connect(query, function(err,result) {
 		if(err) {
 			res.json({error:true});
@@ -55,7 +55,7 @@ router.get('/listFormatAvailable',function(req,res)
 		else {
 			res.json(result.rows);
 		}
-	});
+	}, [req.param.format_id]);
 });
 
 router.post('/formatAdd', function(req, res)

@@ -10,7 +10,7 @@ var router = express.Router() //This variable represent the routing of our appli
 
 
 router.get('/',function(req,res){
-	res.send('Welcome to users API')
+	res.send('Welcome to purchase API')
 })
 
 router.post('/new',function(req,res)
@@ -20,7 +20,7 @@ router.post('/new',function(req,res)
 	//var decoded = jwt.verify(token,global.PRIVATE_KEY);
 	//console.log(decoded.id)
 
-		var query = "SELECT * FROM user.customers WHERE mail = $1 AND password = $2";
+		var query = "SELECT * FROM users.customers WHERE mail = $1 AND password = $2";
 	database.connect(query, function(req, res){
 		if(err)
 		{
@@ -42,8 +42,8 @@ router.post('/new',function(req,res)
 
 router.get('/listOrders',function(req,res)
 {
-	var user_id = [1];
-	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchases.orders WHERE customer_id = $1";
+	var user_id = [4];
+	var query = "SELECT * FROM purchases.orders WHERE customer_id = $1";
 	database.connect(query, function(err, result) {
 		if(err)
 		{
@@ -51,10 +51,12 @@ router.get('/listOrders',function(req,res)
 		}
 		else
 		{
-			res.json(result.rows);
+			res.json(result.rows);	
 		}
 	}, user_id);
 });
+
+
 
 router.get('/validationMail',function(req,res)
 {
