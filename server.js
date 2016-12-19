@@ -6,6 +6,11 @@ var path = require("path");
 var apiPath = require('./API/api');
 //We create our application
 var app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+
 var apiProxy = httpProxy.createProxyServer();//We import the file we need
 
 

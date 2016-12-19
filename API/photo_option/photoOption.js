@@ -33,7 +33,7 @@ router.get('/',function(req,res){
 
 router.get('/listFormat',function(req,res)
 {
-	var query = "SELECT * FROM format";
+	var query = "SELECT * FROM photo_options.format";
 	database.connect(query, function(err, result) {
 		if(err) {
 			res.json({error:true});
@@ -60,16 +60,19 @@ router.get('/listFormatAvailable',function(req,res)
 
 router.post('/formatAdd', function(req, res)
 {
-	if(!req.params._name || !req.params.format_price)
+	if(req.body.format_name && req.body.format_price)
 	{
-		var query = "INSERT INTO format (format_name, format_price) VALUES ($1,$2)";
+		var query = "INSERT INTO photo_options.format (format_name, format_price) VALUES ($1,$2)";
 		database.connect(query, function(err,result) {
 			if(err)
 			{
 				res.json({error:true});
 			}
-			res.json(result.rows);
-		}, [req.params.format_name,req.params.format_price]);
+			else
+			{
+				res.json(result.rows);
+			}
+		}, [req.body.format_name,req.body.format_price]);
 	}
 	else
 	{
@@ -77,17 +80,26 @@ router.post('/formatAdd', function(req, res)
 	}
 });
 
-router.post('/filterAdd',function(req,res)
+router.post('/filterAdd', function(req, res)
 {
-	var query = "INSERT INTO photo_options.filter (filter_name, filter_price) VALUES ( $1 , $2 )";
-	database.connect(query, function(err,result) {
-		if(err) {
-			res.json({error:true});
-		}
-		else {
-			res.json(result.rows);
-		}
-	},[req.params.filter_name,req.params.filter_price]);
+	if(req.body.filter_name && req.body.filter_price)
+	{
+		var query = "INSERT INTO photo_options.filter (filter_name, filter_price) VALUES ($1,$2)";
+		database.connect(query, function(err,result) {
+			if(err)
+			{
+				res.json({error:true});
+			}
+			else
+			{
+				res.json({success:"INSERTION SUCESSFUL"});
+			}
+		}, [req.body.filter_name,req.body.filter_price]);
+	}
+	else
+	{
+		res.json({error:true,error_msg:"Suffisent parameters weren't not supplied"})
+	}
 });
 
 module.exports = router;
