@@ -15,7 +15,7 @@ router.get('/',function(req,res){
 
 router.get('/listFilters',function(req,res)
 {
-	var query = "SELECT * FROM filter";
+	var query = "SELECT * FROM photo_options.filter";
 	database.connect(query, function(err, result) {
 		if(err)
 		{
@@ -47,7 +47,7 @@ router.get('/listFormat',function(req,res)
 
 router.get('/listFormatAvailable',function(req,res)
 {
-	var query = "SELECT * FROM format";
+	var query = "SELECT * FROM photo_options.format";
 	database.connect(query, function(err,result) {
 		if(err) {
 			res.json({error:true});
@@ -61,14 +61,27 @@ router.get('/listFormatAvailable',function(req,res)
 router.post('/formatAdd', function(req, res)
 {
 	var newFormat = [];
-	var query = "INSERT INTO format (format_name, format_price) VALUES $1";
+	var query = "INSERT INTO format (format_name, format_price) VALUES ($1,$2)";
 	database.connect(query, function(err,result) {
 		if(err)
 		{
 			res.json({error:true});
 		}
 		res.json(result.rows);
-	}, newFormat);
+	}, [req.param.format_name,format_price]);
+});
+
+router.get('/filterAdd',function(req,res)
+{
+	var query = "INSERT INTO photo_options.filter (filter_name, filter_price) VALUES ( $1 , $2 )";
+	database.connect(query, function(err,result) {
+		if(err) {
+			res.json({error:true});
+		}
+		else {
+			res.json(result.rows);
+		}
+	},[req.param.filter_name,req.param.filter_price]);
 });
 
 module.exports = router;
