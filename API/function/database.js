@@ -30,10 +30,10 @@ module.exports =
 			    //call `done()` to release the client back to the pool 
 			    done();
 			 
-			    if(err) {
+				if(err) {
 					console.error('error running SQL Query :'+ sqlQuery, err);
-			    }
-			    callback(err,result);
+				}
+				return callback(err,result);
 	  	});
 	});
 
