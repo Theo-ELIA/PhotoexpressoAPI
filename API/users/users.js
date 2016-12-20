@@ -53,6 +53,7 @@ router.get('/listOrders',function(req,res)
 	}, user_id);
 });
 
+//fonction validee
 router.get('/validationMail',function(req,res)
 {
 	var query = "SELECT mail FROM users.customers WHERE mail = $1";
@@ -70,8 +71,17 @@ router.get('/validationMail',function(req,res)
 
 router.get('/createAccount',function(req,res)
 {
-	res.send('createAccount !')
+	var query = "INSERT INTO users.customers (last_name, first_name, password, mail, billing_adress_id, gender) VALUES ($1,$2,$3,$4,$5,$6)";
+	//mettre un trigger dans la BDD qui vérifie la validité d'un mail
+	database.connect(query, function(err,result) {
+		if(err)
+		{
+			res.json({error:true});
+		}
+		res.json(result.rows);
+	}, [req.param.last_name, req.param.first_name, req.param.password, req.param.mail, req.param.billing_adress_id, req.param.gender]);
 });
+
 
 router.get('/modifyAccount',function(req,res)
 {
