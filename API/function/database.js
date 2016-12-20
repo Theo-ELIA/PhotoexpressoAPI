@@ -33,7 +33,7 @@ module.exports =
 				if(err) {
 					console.error('error running SQL Query :'+ sqlQuery, err);
 				}
-				return callback(err,result);
+				return new Promise(callback(err,result));
 	  	});
 	});
 
