@@ -69,6 +69,7 @@ module.exports =
 				return ({error:true});
 			}
 			else {
+				console(result);
 				return (result.rows);	
 			}
 		}, parametersValue);
