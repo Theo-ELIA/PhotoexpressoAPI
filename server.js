@@ -2,7 +2,7 @@
 //We import the library we need
 var express = require('express');
 var path = require("path");
- var httpProxy = require('http-proxy');
+var httpProxy = require('http-proxy');
 var apiPath = require('./API/api');
 //We create our application
 var app = express();
@@ -13,9 +13,15 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 var apiProxy = httpProxy.createProxyServer();//We import the file we need
 
-
-
-var port = 80
+var port
+if (process.argv[2] == "local")
+{
+	 port = 8080
+}
+else
+{
+	port = 80
+}
 var hostname = '192.168.11.112';
 var allhostname = '0.0.0.0';
 
@@ -40,6 +46,6 @@ app.all("/phppgadmin/*", function(req, res) {
 
 
 
-app.listen(port, effectiveHost, function(){
+app.listen(port || 8080, effectiveHost, function(){
   console.log('Server running at http://'+effectiveHost+':'+port+'/');
 });

@@ -1,6 +1,16 @@
 "use strict";
 var pg = require('pg');
 //Take a callback function and a SQL query
+
+var SQLconfig =  {
+	user: 'admin',
+	database: 'photoexpresso',
+	password: 'admin',
+	port: 5432,
+	max: 10,
+	idleTimeoutMillis: 30000,
+};
+
 module.exports =
 {
 
@@ -9,7 +19,7 @@ module.exports =
 		if(!arrayParameters) {
 			arrayParameters = [];
 		}
-		var pool = new pg.Pool(global.SQLconfig);
+		var pool = new pg.Pool(SQLconfig);
 		pool.connect(function(err, client, done) {
 
 		  if(err) {
