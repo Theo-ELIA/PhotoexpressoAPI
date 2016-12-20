@@ -9,9 +9,7 @@ var purchasePath = require('./purchase/purchase');
 
 var router = express.Router() //This variable represent the routing of our application
 router.use(function (req, res, next) {
-	if(req.params) {
-		console.log(req.body.test_json);
-	}
+
 	next()
 })
 router.use('/users/',usersPath);

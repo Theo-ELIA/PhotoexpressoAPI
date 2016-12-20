@@ -41,16 +41,14 @@ router.get('/connection',function(req,res)
 router.get('/listOrders',function(req,res)
 {
 	var user_id = [4];
-	var query = "SELECT shipping_fee, last_name, first_name, street_adress, postal_code, city, gender, quantity, price_per_unit, date_purchase, date_delivery FROM purchase.purchase_per_adress pa JOIN users.adress ON pa.shipping_adress_id = adress.id JOIN purchase.exemplary_quantity eq ON eq.purchase_id = pa.id JOIN purchase.purchase_historic ph ON pa.global_purchase_id = ph.id WHERE ph.customer_id = $1";
-	database.connect(query, function(err,result) {
-		if(err)
-		{
-			res.json({error:true});
-		}
-		else {
-			res.json(result.rows);
-		}
-	}, user_id);
+	var query = "SELECT * FROM purchases.orders";
+	var promiseData = database.connect(query,user_id);
+
+	promiseData.then(function(result) {
+		console.log(result)
+		res.json(result);
+	})
+
 });
 
 //fonction validee

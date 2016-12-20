@@ -98,7 +98,7 @@ router.get('/AdressList',function(req,res)
 
 router.get('/createAddress',function(req,res)
 {
-	res.send('createAddress !')
+	manageHTTP_POST([],req.body,SQLtable,optionalParametersArray)
 });
 
 router.get('/listUsers',function(req,res)
