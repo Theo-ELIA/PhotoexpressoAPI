@@ -67,7 +67,7 @@ router.get('/validationMail',function(req,res)
 	}, [email])
 });
 
-router.get('/createAccount',function(req,res)
+router.post('/createAccount',function(req,res)
 {
 	var query = "INSERT INTO users.customers (last_name, first_name, password, mail, billing_adress_id, gender) VALUES ($1,$2,$3,$4,$5,$6)";
 	//mettre un trigger dans la BDD qui vérifie la validité d'un mail

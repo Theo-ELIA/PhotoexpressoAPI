@@ -71,15 +71,6 @@ router.get('/validationMail',function(req,res)
 	}, email);
 });
 
-router.get('/createAccount',function(req,res)
-{
-	res.send('createAccount !')
-});
-
-router.get('/modifyAccount',function(req,res)
-{
-	res.send('modifyAccount !')
-});
 
 router.get('/AdressList',function(req,res)
 {
