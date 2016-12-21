@@ -2,6 +2,8 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var database = require('../function/database');
+var APIpost = require('../function/APIpost');
+
 
 
 //We import the files we need
@@ -82,24 +84,7 @@ router.post('/formatAdd', function(req, res)
 
 router.post('/filterAdd', function(req, res)
 {
-	if(req.body.filter_name && req.body.filter_price)
-	{
-		var query = "INSERT INTO photo_options.filter (filter_name, filter_price) VALUES ($1,$2)";
-		database.connect(query, function(err,result) {
-			if(err)
-			{
-				res.json({error:true});
-			}
-			else
-			{
-				res.json({success:"INSERTION SUCESSFUL"});
-			}
-		}, [req.body.filter_name,req.body.filter_price]);
-	}
-	else
-	{
-		res.json({error:true,error_msg:"Suffisent parameters weren't not supplied"})
-	}
+	res.json(APIpost.manageHTTP_POST(['filter_name','filter_price'],req.body,"photo_options.filter"));
 });
 
 module.exports = router;

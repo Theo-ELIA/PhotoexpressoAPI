@@ -64,17 +64,12 @@ module.exports =
 		var query = "INSERT INTO " + SQLtable + " " + setOfParameters + " VALUES " + setOfPreparedQueryParameters + " returning *";
 		console.log(query)
 
-		database.connect(query, function(err, result) {
-			if(err) {
-				return ({error:true});
-			}
-			else {
-				console(result);
-				return (result.rows);	
-			}
-		}, parametersValue);
+		var promise = database.connect( query, parametersValue );
 
+		promise.then(function(result) {
+			console.log(result);
+			return(result);
+		});
 	}
-
 
 };
