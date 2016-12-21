@@ -3,25 +3,32 @@
 var express = require('express');
 var path = require("path");
 var httpProxy = require('http-proxy');
-var apiPath = require('./API/api');
+var argv = require('optimist').argv;
+
 //We create our application
 var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
-
 var apiProxy = httpProxy.createProxyServer();//We import the file we need
 
+//We parse the arguments of the script
+global.isDebugMode = (argv.debug != undefined);
+if(global.isDebugMode) {
+	console.log("Debug Mode enabled")
+}
+var apiPath = require('./API/api');
 var port
-if (process.argv[2] == "local")
+
+if (argv.local)
 {
-	 port = 8080
+	port = 8080
 }
 else
 {
 	port = 80
 }
+
 var hostname = '192.168.11.112';
 var allhostname = '0.0.0.0';
 

@@ -37,7 +37,7 @@ module.exports =
 		if(!optionalParametersArray) {
 			optionalParametersArray = []
 		}
-		;
+
 		//We verify that the HTTP Request has all the parameters we need
 		for( var i = 0 ; i< requiredParametersArray.length ; i++ ) {
 			if(!HTTPRequestParameters[requiredParametersArray[i]])
@@ -106,7 +106,10 @@ module.exports =
 		else {
 			query = "INSERT INTO " + SQLtable + " " + setOfParameters + " VALUES " + setOfPreparedQueryParameters + " returning *";
 		}
-		console.log(query)
+
+		if(global.isDebugMode) {
+			console.log(query)
+		}
 
 		var promise = database.connect( query, parametersValue );
 
