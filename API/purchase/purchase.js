@@ -2,7 +2,8 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var database = require('../function/database');
-
+var APIpost = require('../function/APIpost');
+var purchase_management = require('../function/purchase_management');
 
 //We import the files we need
 var router = express.Router() //This variable represent the routing of our application
@@ -13,96 +14,62 @@ router.get('/',function(req,res){
 	res.send('Welcome to purchase API')
 })
 
-router.post('/new',function(req,res)
+
+//Il faut rajouter la photo dans les arguments du post exemplary_quantity_promise
+router.post('/addExemplaries',function(req,res)
 {
-	var purchase = [1, new Date(), []];
-	var query = "INSERT INTO purchases.purchase_historic (customer_id, date_purchase) VALUES ($1, CURRENT_TIME)";
-	//var decoded = jwt.verify(token,global.PRIVATE_KEY);
-	//console.log(decoded.id)
+	var customer_id = 4;
 
-		var query = "SELECT * FROM users.customers WHERE mail = $1 AND password = $2";
-	database.connect(query, function(req, res){
-		if(err)
-		{
-			res.json({error:true});
-		}
-		if(result.rows.length == 1)
-		{
-			var token = jwt.sign({ id: result.rows.id }, global.PRIVATE_KEY);
-			res.json(token);
-		}
-		else
-		{
-			res.json({error:true});
-		}
+	var purchase_id_promise = purchase_management.order_exist(customer_id);
+	console.log(purchase_id_promise);
+	purchase_id_promise.then(function(purchase_id){
+		console.log("Le purchase id:" + purchase_id[0].p_id);
+		var purchase_id = purchase_id[0].p_id;
+		//On fait les inserts pour creer la commande si elle existe deja (3 inserts), on la créée si elle n'existe pas
+		var object_purchase_per_adress = { global_purchase_id : purchase_id , shipping_adress_id : req.body.shipping_adress_id}
+		var purchase_per_adress_promise = APIpost.manageHTTP_POST(["global_purchase_id","shipping_adress_id"],object_purchase_per_adress,"purchases.purchase_per_adress");
+		console.log("le truc: " + purchase_per_adress_promise);
+		purchase_per_adress_promise.then(function(purchase_per_adress) {
 
-	}, [req.param.mail,req.param.password]);
+			var purchase_per_adress_id = purchase_per_adress[0].id;
+			var exemplary_promise = APIpost.manageHTTP_POST(["filter_id","format_id","message_delivery"],req.body,"purchases.exemplary");
+			exemplary_promise.then(function(exemplary_result)
+			{
+				var exemplary_id = exemplary_result[0].id
+				var exemplary_quantity_promise = APIpost.manageHTTP_POST(["exemplary_id","purchase_per_adress_id","quantity","price_per_unit"],{exemplary_id : exemplary_id, purchase_per_adress_id : purchase_per_adress_id, quantity : req.body.quantity, price_per_unit : req.body.price_per_unit},"purchases.exemplary_quantity");
+				exemplary_quantity_promise.then(function()
+				{
 
+				});
+			});
+		});
+	})
+	.catch(function(err) {
+		console.log(err);
+		res.json(err);
+	})
 });
 
-router.get('/listOrders',function(req,res)
+
+
+
+
+
+router.get('/listOrders/:user_id',function(req,res)
 {
-	var user_id = [4];
+
 	var query = "SELECT * FROM purchases.orders WHERE customer_id = $1";
-	database.connect(query, function(err, result) {
-		if(err)
-		{
-			res.json({error:true});
-		}
-		else
-		{
-			res.json(result.rows);	
-		}
-	}, user_id);
+	var promiseData = database.connect(query,[user_id]);
+
+	promiseData.then(function(result){
+		res.json(result);
+	})
 });
 
 
 
-router.get('/validationMail',function(req,res)
-{
-	var query = "SELECT mail FROM users.customers WHERE mail = $1";
-	var email = ["ilovebarlouf@lycos.fr"];
-	database.connect(query, function(err, result) {
-		if(err)
-		{
-			res.json({error:true});
-		}
-		res.json(result.rows);
-	}, email);
-});
 
 
-router.get('/AdressList',function(req,res)
-{
-	var user_id = [1];
-	var query = 'SELECT last_name, first_name, street_adress, postal_code, city, gender FROM users.contact_list cl LEFT JOIN adress ON cl.shipping_adress_id = adress.id WHERE cl.user_id = $1';
-	database.connect(query, function(err,result) {
-		if(err)
-		{
-			res.json({error:true});
-		}
-		res.json(result.rows);
-	}, user_id);
-
-	res.send('AdressList !')
-});
-
-router.get('/createAddress',function(req,res)
-{
-	manageHTTP_POST([],req.body,SQLtable,optionalParametersArray)
-});
-
-router.get('/listUsers',function(req,res)
-{
-	var query = 'SELECT * FROM users.customers';
-	database.connect(query,function(err,result) {
-		if(err)
-		{
-			res.json({error : true});
-		}
-		res.json(result.rows);
-	});
-});
 
 
 

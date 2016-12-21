@@ -43,7 +43,7 @@ module.exports =
 			if(!HTTPRequestParameters[requiredParametersArray[i]])
 			{
 				jsonResponse = { error : "The parameter : " + requiredParametersArray[i] + " was not supplied" };
-				return jsonResponse;
+				throw jsonResponse;
 			}
 		}
 
@@ -107,21 +107,19 @@ module.exports =
 			query = "INSERT INTO " + SQLtable + " " + setOfParameters + " VALUES " + setOfPreparedQueryParameters + " returning *";
 		}
 
-		if(global.isDebugMode) {
-			console.log(query)
-		}
+		console.log(query)
 
 		var promise = database.connect( query, parametersValue );
 
 		promise.then(function(result) {
 			console.log(result);
-			return promise;
 		})
 		.catch(function(err) {
-			console.err(err)
-			return promise
+			console.log(err)
+			throw(err);
 		})
 
+		return promise
 }
 
 };
