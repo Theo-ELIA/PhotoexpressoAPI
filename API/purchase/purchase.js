@@ -23,12 +23,13 @@ router.post('/addExemplaries',function(req,res)
 	var purchase_id_promise = purchase_management.order_exist(customer_id);
 	console.log(purchase_id_promise);
 	purchase_id_promise.then(function(purchase_id){
-		console.log("Le purchase id:" + purchase_id[0].p_id);
-		var purchase_id = purchase_id[0].p_id;
+		console.log("Le purchase id:" + purchase_id + "\"");
+		var purchase_id = purchase_id;
 		//On fait les inserts pour creer la commande si elle existe deja (3 inserts), on la créée si elle n'existe pas
 		var object_purchase_per_adress = { global_purchase_id : purchase_id , shipping_adress_id : req.body.shipping_adress_id}
 		var purchase_per_adress_promise = APIpost.manageHTTP_POST(["global_purchase_id","shipping_adress_id"],object_purchase_per_adress,"purchases.purchase_per_adress");
 		console.log("le truc: " + purchase_per_adress_promise);
+		
 		purchase_per_adress_promise.then(function(purchase_per_adress) {
 
 			var purchase_per_adress_id = purchase_per_adress[0].id;
