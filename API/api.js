@@ -6,7 +6,8 @@ global.PRIVATE_KEY = "Jean-Pierre Coffe";
 var photoOptionPath = require('./photo_option/photoOption');
 var usersPath = require('./users/users');
 var purchasePath = require('./purchase/purchase');
-
+var apipost = require('./function/APIpost');
+apipost.manageHTTP_POST(["filter_name","filter_price"],{filter_name: "TooManyFilter",filter_price:2.34},"photo_options.filter",[],{id_name : "id", id_to_update : 6});
 var router = express.Router() //This variable represent the routing of our application
 router.use(function (req, res, next) {
 

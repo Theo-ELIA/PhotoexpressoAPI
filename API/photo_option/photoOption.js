@@ -2,9 +2,6 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var database = require('../function/database');
-var APIpost = require('../function/APIpost');
-
-
 
 //We import the files we need
 var router = express.Router() //This variable represent the routing of our application
