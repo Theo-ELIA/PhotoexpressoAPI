@@ -2,6 +2,7 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var database = require('../function/database');
+var APIget = require('../function/APIget');
 
 
 //We import the files we need
@@ -40,9 +41,8 @@ router.get('/connection',function(req,res)
 
 router.get('/listOrders',function(req,res)
 {
-	var user_id = [4];
 	var query = "SELECT * FROM purchases.orders";
-	var promiseData = database.connect(query,user_id);
+	var promiseData = database.connect(query);
 
 	promiseData.then(function(result) {
 		console.log(result)
@@ -50,6 +50,25 @@ router.get('/listOrders',function(req,res)
 	})
 
 });
+
+router.get('/listOrders/order/:idCustomer',function(req,res) {
+	var idCustomer = req.params.idCustomer;
+	var promise_orders = manageHTTP_GET(["*"],"purchases.orders",{ ph_customer: idCustomer})
+	promise_orders.then(function(orders) {
+		res.json(orders);
+	})
+
+router.get('/listOrders/order/:idOrder',function(req,res) {
+	var idOrder = req.params.idOrder;
+	var promise_order = manageHTTP_GET(["*"],"purchases.orders",{ph_id : idOrder})
+	promise_order.then(function(orders) {
+		res.json(order);
+	})
+
+
+
+}
+
 
 //fonction validee
 router.get('/validationMail',function(req,res)
