@@ -2,6 +2,8 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var database = require('../function/database');
+var APIget = require('../function/APIget');
+
 
 //We import the files we need
 var router = express.Router() //This variable represent the routing of our application
@@ -13,17 +15,17 @@ router.get('/',function(req,res){
 })
 
 /*Format */
-router.get('/listFormats',function(req,res)
-{
-	var query = "SELECT * FROM photo_options.format";
-	database.connect(query, function(err, result) {
-		if(err) {
-			res.json({error:true});
-		}
-		else {
-			res.json(result.rows);
-		}
-	});
+router.get('/listFormats',function(req,res) {
+
+	APIget.manageHTTP_GET(['*'],"photo_options.format")
+		.then(function(result) {
+				console.log(result);
+				res.json(result);
+		})
+		.catch(function(err)
+		{
+			console.log(err);
+		})
 });
 
 
@@ -75,6 +77,23 @@ router.post('/deleteFormats', function(req, res)
 
 router.get('/format/:idFormat', function(req, res)
 {
+	if(!Number.isInteger) {
+		res.json( { error : true , error_description : "The id Format parameter is not an integer"} );
+	}
+
+	var idFormat = Number(req.params.idFormat);
+	APIget.manageHTTP_GET(['*'],"photo_options.format",{ id : idFormat })
+		.then(function(result) {
+				console.log(result);
+				if(result.length == 0) {
+					result = { error : true, error_description : "No was format was found for this ID" };
+				}
+			res.json(result);
+		})
+		.catch(function(err)
+		{
+			console.log(err);
+		})
 
 });
 
@@ -82,16 +101,18 @@ router.get('/format/:idFormat', function(req, res)
 router.get('/listFilters',function(req,res)
 {
 	var query = "SELECT * FROM photo_options.filter";
-	database.connect(query, function(err, result) {
-		if(err)
-		{
-			res.json({error:true});
-		}
-		else {
-			res.json(result.rows);
-		}
-	}
-)});
+	var promiseDatabase = database.connect(query)
+	console.log("Promesse dans la fonction");
+	console.log(promiseDatabase);
+	promiseDatabase.then(function(result) {
+		res.json(result);
+	})
+	.catch(function(err) {
+		console.log(err);
+		res.status(408);
+	});
+
+});
 
 router.post('/addFilters', function(req, res)
 {
@@ -110,7 +131,24 @@ router.post('/deleteFilters', function(req, res)
 
 router.get('/filter/:idFilter', function(req, res)
 {
-	res.json(APIpost.manageHTTP_POST(['filter_id'],req.body,"photo_options.filter"));
+	if(!Number.isInteger) {
+		res.json( { error : true , error_description : "The id Filter parameter is not an integer"} );
+	}
+
+	console.log(req.params);
+	var idFilter = Number(req.params.idFilter);
+	APIget.manageHTTP_GET(['*'],"photo_options.filter",{ id : idFilter })
+		.then(function(result) {
+				console.log(result);
+				if(result.length == 0) {
+					result = { error : true, error_description : "No was filter was found for this ID" };
+				}
+			res.json(result);
+		})
+		.catch(function(err)
+		{
+			console.log(err);
+		})
 });
 
 module.exports = router;

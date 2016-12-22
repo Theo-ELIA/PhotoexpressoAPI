@@ -42,7 +42,8 @@ module.exports =
 		for( var i = 0 ; i< requiredParametersArray.length ; i++ ) {
 			if(!HTTPRequestParameters[requiredParametersArray[i]])
 			{
-				jsonResponse = { error : "The parameter : " + requiredParametersArray[i] + " was not supplied" };
+				jsonResponse = "The parameter : " + requiredParametersArray[i] + " was not supplied";
+				console.log("The parameter : " + requiredParametersArray[i] + " was not supplied");
 				throw jsonResponse;
 			}
 		}
@@ -111,16 +112,16 @@ module.exports =
 
 		var promise = database.connect( query, parametersValue );
 
-		promise.then(function(result) {
-			console.log(result);
+		return promise.then(function(result) {
+			console.log("Returning a promise POST")
+			console.dir(result);
 			return result;
 		})
 		.catch(function(err) {
-			console.log(err)
+			console.log("Error " + err)
 			throw(err);
 		})
 
-		return promise
 }
 
 };

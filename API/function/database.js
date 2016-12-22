@@ -22,13 +22,18 @@ module.exports =
 			arrayParameters = [];
 		}
 
-		var promise = client.query(sqlQuery,arrayParameters);
-		promise.catch( function(err) {
+		console.log("Executing " + sqlQuery + " in database.js module");
+		return client.query(sqlQuery,arrayParameters)
+			.then(function(resultRow) {
+
+			console.log("Result rows found :");
+			console.log(resultRow);
+			return resultRow;
+		})
+			.catch( function(err) {
 			console.log("Fail to retrieve from the Database")
 			console.log(err);
-			res.json(err);
+			return err
 		});
-
-		return promise;
 	}
 }

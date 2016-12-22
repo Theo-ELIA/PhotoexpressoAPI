@@ -6,21 +6,21 @@ module.exports =
 	/*
 	@objIdToSelect : JSON of the ids to select from - format { id_food : 1, id_bar : 17} will make WHERE id_food = 
 	*/
-	manageHTTP_GET : function(requiredParametersArray,SQLtable,objIdToSelect) {
+	manageHTTP_GET : function(selectParametersArray,SQLtable,objIdToSelect) {
 
 		var setOfParameters = "" //Set of the parameters to select
 		var setOfSelectingId = ""
 		var query;
-		if(!requiredParametersArray || !SQLtable)
+		if(!selectParametersArray || !SQLtable)
 		{
 			throw { error : "COTOREP"}
 		}
 
-		for( var i = 0; i < requiredParametersArray.length;i++) {
+		for( var i = 0; i < selectParametersArray.length;i++) {
 
-			var parameter = requiredParametersArray[i];
+			var parameter = selectParametersArray[i];
 
-			if ( i+1 == requiredParametersArray.length ) {
+			if ( i+1 == selectParametersArray.length ) {
 				setOfParameters = setOfParameters + parameter + " "
 			}
 			else {
@@ -54,17 +54,13 @@ module.exports =
 
 		var promise = database.connect( query );
 
-		promise.then(function(result) {
-			if(global.isDebugMode) {
-				console.log(result);
-				return promise
-			}
-
-		})
-		.catch(function(err) {
-			console.log(err)
-			return promise
-		});
+		return promise
+			.then(function(result) {
+				return result
+			})
+			.catch(function(err) {
+				console.log(err)
+			});
 
 	}
 }
