@@ -107,12 +107,13 @@ module.exports =
 			query = "INSERT INTO " + SQLtable + " " + setOfParameters + " VALUES " + setOfPreparedQueryParameters + " returning *";
 		}
 
-		console.log(query)
+		console.log("API Post = " + query)
 
 		var promise = database.connect( query, parametersValue );
 
 		promise.then(function(result) {
 			console.log(result);
+			return result;
 		})
 		.catch(function(err) {
 			console.log(err)

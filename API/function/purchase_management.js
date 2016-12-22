@@ -12,12 +12,12 @@ module.exports =
 
 		var check_current_orders_promise = database.connect(query_orders, customer_id);
 
-		check_current_orders_promise.then(function(result)
+		return check_current_orders_promise.then(function(result)
 		{
 			if (result && result.length > 0)
 			{
 				console.log("LOG PURCHASE SELECT MANAGEMENT " +result[0].id);
-				return (result[0].id);
+				return result[0].id;
 			}
 			else
 			{
@@ -25,22 +25,11 @@ module.exports =
 				return create_command.then(function(purchase_id)
 				{
 					console.log("LOG PURCHASE INSERT MANAGEMENT " +purchase_id[0].id);
-					return Promise.resolve(purchase_id[0].id);
+					return purchase_id[0].id;
 				});
 
 
 			}
-		})
-		.catch(function(result)
-		{
-			return "Error in Purchase Management";
-		})
-
-		check_current_orders_promise.then(function(result) {
-			console.log("RESULT : "+result);
-			throw "COTOREP";
-		})
-		return check_current_orders_promise
-
+		});
 	}
 }

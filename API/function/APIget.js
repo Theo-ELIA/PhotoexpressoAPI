@@ -19,7 +19,7 @@ module.exports =
 		for( var i = 0; i < requiredParametersArray.length;i++) {
 
 			var parameter = requiredParametersArray[i];
-			console.log(requiredParametersArray.lastIndexOf(parameter))
+
 			if ( i+1 == requiredParametersArray.length ) {
 				setOfParameters = setOfParameters + parameter + " "
 			}
@@ -49,7 +49,7 @@ module.exports =
 		}
 		
 		var query = "SELECT " + setOfParameters + " FROM " + SQLtable + " " + setOfSelectingId;
-		console.log(query)
+		console.log("API GET ="+query)
 
 
 		var promise = database.connect( query );

@@ -56,7 +56,8 @@ router.get('/listOrders/order/:idCustomer',function(req,res) {
 	var promise_orders = manageHTTP_GET(["*"],"purchases.orders",{ ph_customer: idCustomer})
 	promise_orders.then(function(orders) {
 		res.json(orders);
-	})
+	});
+});
 
 router.get('/listOrders/order/:idOrder',function(req,res) {
 	var idOrder = req.params.idOrder;
@@ -67,7 +68,7 @@ router.get('/listOrders/order/:idOrder',function(req,res) {
 
 
 
-}
+});
 
 
 //fonction validee
