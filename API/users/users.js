@@ -24,10 +24,11 @@ router.get('/connection',function(req,res)
 		if(err)
 		{
 			res.json({error:true});
+			console.error(err)
 		}
 		if(result.rows.length == 1)
 		{
-			var token = jwt.sign({ id: result.rows.id }, global.PRIVATE_KEY);
+			var token = jwt.sign({ id: result.rows.id, role : "client", date_expiration_token : Date.now()  }, global.PRIVATE_KEY);
 			res.json(token);
 		}
 		else
@@ -51,7 +52,7 @@ router.get('/listOrders',function(req,res)
 
 });
 
-router.get('/listOrders/order/:idCustomer',function(req,res) {
+router.get('/orders/customer/:idCustomer',function(req,res) {
 	var idCustomer = req.params.idCustomer;
 	var promise_orders = manageHTTP_GET(["*"],"purchases.orders",{ ph_customer: idCustomer})
 	promise_orders.then(function(orders) {
@@ -59,16 +60,18 @@ router.get('/listOrders/order/:idCustomer',function(req,res) {
 	});
 });
 
-router.get('/listOrders/order/:idOrder',function(req,res) {
+router.get('/order/order/:idOrder',function(req,res) {
 	var idOrder = req.params.idOrder;
 	var promise_order = manageHTTP_GET(["*"],"purchases.orders",{ph_id : idOrder})
 	promise_order.then(function(orders) {
 		res.json(order);
 	})
 
+router.get('/deleteOrders',function(req,res)
+{});
 
-
-});
+router.get('/addOrders',function(req,res)
+{});
 
 
 //fonction validee
@@ -87,7 +90,21 @@ router.get('/validationMail',function(req,res)
 	}, [email])
 });
 
-router.post('/createAccount',function(req,res)
+router.get('/listAccounts',function(req,res)
+{
+	var query = 'SELECT * FROM users.customers';
+	database.connect(query,function(err,result) {
+		if(err)
+		{
+			res.json({error : true});
+		}
+		else {
+		res.json(result.rows);
+		}
+	});
+});
+
+router.post('/createAccounts',function(req,res)
 {
 	var query = "INSERT INTO users.customers (last_name, first_name, password, mail, billing_adress_id, gender) VALUES ($1,$2,$3,$4,$5,$6)";
 	//mettre un trigger dans la BDD qui vérifie la validité d'un mail
@@ -101,14 +118,26 @@ router.post('/createAccount',function(req,res)
 });
 
 
-router.get('/modifyAccount',function(req,res)
+router.get('/updateAccounts',function(req,res)
 {
-	res.send('modifyAccount !')
+	res.send('modifyAccount !');
 });
 
-router.get('/AdressList',function(req,res)
+router.get('/deleteAccounts',function(req,res)
 {
-	var user_id = [4];
+	res.send('Delete Accounts !');
+});
+
+router.get('/account/:idAccount',function(req,res)
+{
+	res.send('Account ! ' + req.params.idAccount);
+});
+
+
+
+router.get('/listAdressList/:idClient',function(req,res)
+{
+	var user_id = req.params.idClient;
 	var query = 'SELECT last_name, first_name, street_adress, postal_code, city, gender FROM contact_list cl LEFT JOIN adress ON cl.shipping_adress_id = adress.id WHERE cl.user_id = $1';
 	database.connect(query, function(err, result) {
 		if(err)
@@ -126,21 +155,14 @@ router.get('/createAddress',function(req,res)
 	res.send('createAddress !')
 });
 
-router.get('/listUsers',function(req,res)
+router.post('/deleteAdress/:idAdress',function(req,res)
 {
-	var query = 'SELECT * FROM users.customers';
-	database.connect(query,function(err,result) {
-		if(err)
-		{
-			res.json({error : true});
-		}
-		else {
-		res.json(result.rows);
-		}
-	});
+	res.send('Deleting Adress :' + req.params.idAdress);
 });
 
-
-
+router.get('/account/:idAccount',function(req,res)
+{
+	res.send('Viewing account n°' + req.params.idAccount);
+})
 //We export the router so we can use it
 module.exports = router;

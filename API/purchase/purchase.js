@@ -56,28 +56,5 @@ router.post('/addExemplaries',function(req,res)
 	})
 });
 
-
-
-
-
-
-router.get('/listOrders/:user_id',function(req,res)
-{
-
-	var query = "SELECT * FROM purchases.orders WHERE customer_id = $1";
-	var promiseData = database.connect(query,[user_id]);
-
-	promiseData.then(function(result){
-		res.json(result);
-	})
-});
-
-
-
-
-
-
-
-
 //We export the router so we can use it
 module.exports = router;
