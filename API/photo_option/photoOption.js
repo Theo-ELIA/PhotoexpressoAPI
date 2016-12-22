@@ -64,13 +64,19 @@ router.post('/addFormats', function(req, res)
 
 
 router.post('/updateFormats', function(req, res)
-{}
+{
+
+});
 
 router.post('/deleteFormats', function(req, res)
-{}
+{
+
+});
 
 router.get('/format/:idFormat', function(req, res)
-{}
+{
+
+});
 
 /*Filters*/
 router.get('/listFilters',function(req,res)
@@ -93,12 +99,18 @@ router.post('/addFilters', function(req, res)
 });
 
 router.post('/updateFilters', function(req, res)
-{}
+{
+
+});
 
 router.post('/deleteFilters', function(req, res)
-{}
+{
+
+});
 
 router.get('/filter/:idFilter', function(req, res)
-{}
+{
+	res.json(APIpost.manageHTTP_POST(['filter_id'],req.body,"photo_options.filter"));
+});
 
 module.exports = router;

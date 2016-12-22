@@ -12,7 +12,7 @@ var router = express.Router() //This variable represent the routing of our appli
 
 router.get('/',function(req,res){
 	res.send('Welcome to users API')
-})
+});
 
 router.get('/connection',function(req,res)
 {
@@ -66,6 +66,7 @@ router.get('/order/order/:idOrder',function(req,res) {
 	promise_order.then(function(orders) {
 		res.json(order);
 	})
+});
 
 router.get('/deleteOrders',function(req,res)
 {});
@@ -150,9 +151,9 @@ router.get('/listAdressList/:idClient',function(req,res)
 	}, user_id);
 });
 
-router.get('/createAddress',function(req,res)
+router.get('/addAdress',function(req,res)
 {
-	res.send('createAddress !')
+	res.send('Add Address !')
 });
 
 router.post('/deleteAdress/:idAdress',function(req,res)
@@ -160,9 +161,9 @@ router.post('/deleteAdress/:idAdress',function(req,res)
 	res.send('Deleting Adress :' + req.params.idAdress);
 });
 
-router.get('/account/:idAccount',function(req,res)
+router.get('/adress/:idAdress',function(req,res)
 {
 	res.send('Viewing account n°' + req.params.idAccount);
-})
+});
 //We export the router so we can use it
 module.exports = router;
