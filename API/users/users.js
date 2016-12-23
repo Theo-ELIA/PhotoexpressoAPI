@@ -3,6 +3,8 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var database = require('../function/database');
 var APIget = require('../function/APIget');
+var token = require('../function/token');
+
 
 
 //We import the files we need
@@ -38,22 +40,34 @@ router.post('/connection',function(req,res)
 
 
 
-router.get('/listOrders',function(req,res)
+router.get('/listOrders/',function(req,res)
 {
-	var query = "SELECT * FROM purchases.old_orders WHERE user_id = $1";
-	var promiseData = database.connect(query, [req.param.user_id]);
 
-	promiseData.then(function(err,result)
-	{
-		if(err)
+	if(!token.verifyToken(req.headers["token"],"ADMIN")) {
+		res.json({ error : true , error_description : "You don't have the right to see that."})
+	}
+	else {
+		var query = "SELECT * FROM purchases.old_orders";
+		var promiseData = database.connect(query);
+
+		promiseData.then(function(result,err)
 		{
-			res.json({error:true});
-		}
-		else
-		{
-			res.json(result.rows);
-		}
-	});
+			if(err)
+			{
+				console.log("Error : ");
+				console.log(err);
+				res.json({error:true});
+			}
+			else
+			{
+				res.json(result);
+			}
+		})
+		.catch(function(err){
+			console.log(err);
+			res.status(405);
+		})
+	}
 });
 
 
