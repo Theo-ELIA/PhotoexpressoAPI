@@ -40,17 +40,29 @@ router.get('/connection',function(req,res)
 
 });
 
+
+
 router.get('/listOrders',function(req,res)
 {
-	var query = "SELECT * FROM purchases.orders";
-	var promiseData = database.connect(query);
+	var query = "SELECT * FROM purchases.old_orders WHERE user_id = $1";
+	var promiseData = database.connect(query, [req.param.user_id]);
 
-	promiseData.then(function(result) {
-		console.log(result)
-		res.json(result);
-	})
-
+	promiseData.then(function(err,result)
+	{
+		if(err)
+		{
+			res.json({error:true});
+		}
+		else
+		{
+			res.json(result.rows);
+		}
+	});
 });
+
+
+
+
 
 router.get('/orders/customer/:idCustomer',function(req,res) {
 	var idCustomer = req.params.idCustomer;
@@ -68,12 +80,13 @@ router.get('/order/order/:idOrder',function(req,res) {
 	})
 });
 
-router.get('/deleteOrders',function(req,res)
+//??????????????? ca devrait être dans le fichier purchase
+router.delete('/deleteOrders',function(req,res)
 {});
 
-router.get('/addOrders',function(req,res)
+router.post('/addOrders',function(req,res)
 {});
-
+//???????????????
 
 //fonction validee
 router.get('/validationMail',function(req,res)
@@ -99,7 +112,8 @@ router.get('/listAccounts',function(req,res)
 		{
 			res.json({error : true});
 		}
-		else {
+		else
+		{
 		res.json(result.rows);
 		}
 	});
@@ -119,19 +133,40 @@ router.post('/createAccounts',function(req,res)
 });
 
 
-router.get('/updateAccounts',function(req,res)
+router.post('/updateAccounts',function(req,res)
 {
 	res.send('modifyAccount !');
 });
 
-router.get('/deleteAccounts',function(req,res)
+router.delete('/deleteAccounts',function(req,res)
 {
 	res.send('Delete Accounts !');
 });
 
+
+
 router.get('/account/:idAccount',function(req,res)
 {
-	res.send('Account ! ' + req.params.idAccount);
+	if(!Number.isInteger)
+	{
+		res.json( { error : true , error_description : "The id Account parameter must be an integer"} );
+	}
+
+	console.log(req.params);
+	var idUser = Number(req.params.idUsers);
+	APIget.manageHTTP_GET(['*'],"users.customers",{ id : idUser })
+		.then(function(result) {
+				console.log(result);
+				if(result.length == 0) 
+				{
+					result = { error : true, error_description : "No was Account found for this ID" };
+				}
+			res.json(result);
+		})
+		.catch(function(err)
+		{
+			console.log(err);
+		})
 });
 
 
@@ -151,9 +186,11 @@ router.get('/listAdressList/:idClient',function(req,res)
 	}, user_id);
 });
 
-router.get('/addAdress',function(req,res)
+
+
+router.post('/addAdress',function(req,res)
 {
-	res.send('Add Address !')
+	res.json(APIpost.manageHTTP_POST(['last_name','first_name','street_adress','postal_code','city','gender'],req.body,"users.adress"));
 });
 
 router.post('/deleteAdress/:idAdress',function(req,res)
@@ -161,9 +198,30 @@ router.post('/deleteAdress/:idAdress',function(req,res)
 	res.send('Deleting Adress :' + req.params.idAdress);
 });
 
+
+
 router.get('/adress/:idAdress',function(req,res)
 {
-	res.send('Viewing account n°' + req.params.idAccount);
+		if(!Number.isInteger)
+	{
+		res.json( { error : true , error_description : "The id Adress parameter must be an integer"} );
+	}
+
+	console.log(req.params);
+	var idAdress = Number(req.params.idAdress);
+	APIget.manageHTTP_GET(['*'],"users.adress",{ id : idAdress })
+		.then(function(result) {
+				console.log(result);
+				if(result.length == 0) 
+				{
+					result = { error : true, error_description : "No Adress was found for this ID" };
+				}
+			res.json(result);
+		})
+		.catch(function(err)
+		{
+			console.log(err);
+		})
 });
 //We export the router so we can use it
 module.exports = router;
