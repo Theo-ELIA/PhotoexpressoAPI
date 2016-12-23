@@ -66,17 +66,40 @@ router.get('/listOrders',function(req,res)
 
 router.get('/orders/customer/:idCustomer',function(req,res) {
 	var idCustomer = req.params.idCustomer;
-	var promise_orders = manageHTTP_GET(["*"],"purchases.orders",{ ph_customer: idCustomer})
-	promise_orders.then(function(orders) {
+	if(idCustomer != parseInt(idCustomer,10)) {
+		res.json( { error : true , error_description : "The id Account parameter must be an integer"} );
+
+	}
+	idCustomer = parseInt(idCustomer, 10)
+	var promise_order = APIget.manageHTTP_GET(["*"],"purchases.old_orders",{c_id : idCustomer})
+	promise_order.then(function(orders) {
 		res.json(orders);
-	});
+	})
+	.catch(function(err) {
+		console.log(err);
+		res.status(500);
+	})
 });
 
 router.get('/order/order/:idOrder',function(req,res) {
 	var idOrder = req.params.idOrder;
-	var promise_order = manageHTTP_GET(["*"],"purchases.orders",{ph_id : idOrder})
+	if(idOrder != parseInt(idOrder,10)) {
+		res.json( { error : true , error_description : "The id Account parameter must be an integer"} );
+
+	}
+	idOrder = parseInt(idOrder, 10)
+	var promise_order = APIget.manageHTTP_GET(["*"],"purchases.old_orders",{ph_id : idOrder})
 	promise_order.then(function(orders) {
-		res.json(order);
+		if(orders.length > 0) {
+			res.json(orders);
+		}
+		else {
+			res.json( { error : true , error_description : "The order doesn't exist"} )
+		}
+	})
+	.catch(function(err) {
+		console.log(err);
+		res.status(500);
 	})
 });
 
@@ -147,13 +170,12 @@ router.delete('/deleteAccounts',function(req,res)
 
 router.get('/account/:idAccount',function(req,res)
 {
-	if(!Number.isInteger)
-	{
+	var idUser = req.params.idAccount;
+	if(idUser != parseInt(idUser, 10) ) {
 		res.json( { error : true , error_description : "The id Account parameter must be an integer"} );
 	}
 
-	console.log(req.params);
-	var idUser = Number(req.params.idUsers);
+	idUser = parseInt(idUser, 10);
 	APIget.manageHTTP_GET(['*'],"users.customers",{ id : idUser })
 		.then(function(result) {
 				console.log(result);
@@ -202,13 +224,12 @@ router.post('/deleteAdress/:idAdress',function(req,res)
 
 router.get('/adress/:idAdress',function(req,res)
 {
-		if(!Number.isInteger)
-	{
+	var idAdress = req.params.idAdress
+	if(idAdress != parseInt(idAdress, 10)) {
 		res.json( { error : true , error_description : "The id Adress parameter must be an integer"} );
 	}
-
-	console.log(req.params);
-	var idAdress = Number(req.params.idAdress);
+	
+	idAdress = parseInt(idAdress, 10);
 	APIget.manageHTTP_GET(['*'],"users.adress",{ id : idAdress })
 		.then(function(result) {
 				console.log(result);

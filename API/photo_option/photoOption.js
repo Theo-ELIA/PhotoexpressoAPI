@@ -77,11 +77,13 @@ router.post('/deleteFormats', function(req, res)
 
 router.get('/format/:idFormat', function(req, res)
 {
-	if(!Number.isInteger) {
+	var idFormat = req.params.idFormat;
+
+	if(idFormat != parseInt(idFormat, 10)) {
 		res.json( { error : true , error_description : "The id Format parameter is not an integer"} );
 	}
 
-	var idFormat = Number(req.params.idFormat);
+	idFormat = parseInt(idFormat, 10);
 	APIget.manageHTTP_GET(['*'],"photo_options.format",{ id : idFormat })
 		.then(function(result) {
 				console.log(result);
@@ -131,12 +133,13 @@ router.post('/deleteFilters', function(req, res)
 
 router.get('/filter/:idFilter', function(req, res)
 {
-	if(!Number.isInteger) {
+	var idFilter = req.params.idFilter;
+
+	if(idFilter != parseInt(idFilter, 10)) {
 		res.json( { error : true , error_description : "The id Filter parameter is not an integer"} );
 	}
 
-	console.log(req.params);
-	var idFilter = Number(req.params.idFilter);
+	idFilter = parseInt(idFilter,10)
 	APIget.manageHTTP_GET(['*'],"photo_options.filter",{ id : idFilter })
 		.then(function(result) {
 				console.log(result);
