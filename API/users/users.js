@@ -14,29 +14,25 @@ router.get('/',function(req,res){
 	res.send('Welcome to users API')
 });
 
-router.get('/connection',function(req,res)
+router.post('/connection',function(req,res)
 {
-	//var decoded = jwt.verify(token,global.PRIVATE_KEY);
-	//console.log(decoded.id)
+	var promise_connection = APIget.manageHTTP_GET(["*"],"users.customers",{mail : req.body.mail , password : req.body.password})
 
-		var query = "SELECT * FROM user.customers WHERE mail = $1 AND password = $2";
-	database.connect(query, function(err, result){
-		if(err)
-		{
-			res.json({error:true});
-			console.error(err)
-		}
-		if(result.rows.length == 1)
-		{
-			var token = jwt.sign({ id: result.rows.id, role : "client", date_expiration_token : Date.now()  }, global.PRIVATE_KEY);
-			res.json(token);
-		}
-		else
-		{
-			res.json({error:true});
-		}
-
-	}, [mail,password]);
+	promise_connection
+		.then(function(identifier) {
+			if(identifier.length === 1) {
+				var token = jwt.sign({idCustomer : identifier.id, expirationDate : Date.now(), role : "CUSTOMER"},global.PRIVATE_KEY);
+				res.json(token)
+			}
+			else
+			{
+				res.json({ error : true , error_description : "Incorrect credentials"})
+			}
+		})
+		.catch(function(error) {
+			console.log(error);
+			res.status(404);
+		})
 
 });
 

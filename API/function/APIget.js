@@ -35,12 +35,12 @@ module.exports =
 					setOfSelectingId = setOfSelectingId + "WHERE ";
 				}
 				else {
-					setOfSelectingId = setOfSelectingId + "AND ";
+					setOfSelectingId = setOfSelectingId + " AND ";
 				}
 
 				setOfSelectingId = setOfSelectingId + Object.keys(objIdToSelect)[i] + "=";
 				if(typeof(objIdToSelect[Object.keys(objIdToSelect)[i]]) == "string") {
-					setOfSelectingId = setOfSelectingId + "\"" + objIdToSelect[Object.keys(objIdToSelect)[i]] + "\"";  
+					setOfSelectingId = setOfSelectingId + "'" + objIdToSelect[Object.keys(objIdToSelect)[i]] + "'";  
 				}
 				else {
 					setOfSelectingId = setOfSelectingId + objIdToSelect[Object.keys(objIdToSelect)[i]] + " ";
