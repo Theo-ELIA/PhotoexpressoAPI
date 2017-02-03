@@ -18,28 +18,28 @@ module.exports =
 		var setOfPreparedQueryParameters; // For INSERT INTO statement VALUES($1,$2,$3,$4)
 		var setOfParameters; // Array of parameters we will insert into or update
 		var parametersValue = []; //Array of the value we will put into the database
-		var query //SQL Query we're going to execute
-		var jsonResponse
+		var query; //SQL Query we're going to execute
+		var jsonResponse;
 
 		if(!requiredParametersArray || !HTTPRequestParameters || !SQLtable)
 		{
-			throw { error : "COTOREP"}
+			throw { error : "COTOREP"};
 		}
 
 		if(objIdUpdate)
 		{
 			if(!objIdUpdate.id_name || !objIdUpdate.id_to_update)
 			{
-				throw { error : "The objIdUpdate prvided was incomplete"}
+				throw { error : "The objIdUpdate prvided was incomplete"};
 			}
 		}
 
 		if(!optionalParametersArray) {
-			optionalParametersArray = []
+			optionalParametersArray = [];
 		}
 
 		//We verify that the HTTP Request has all the parameters we need
-		for( var i = 0 ; i< requiredParametersArray.length ; i++ ) {
+		for( let i = 0 ; i< requiredParametersArray.length ; i++ ) {
 			if(!HTTPRequestParameters[requiredParametersArray[i]])
 			{
 				jsonResponse = "The parameter : " + requiredParametersArray[i] + " was not supplied";
@@ -49,10 +49,10 @@ module.exports =
 		}
 
 		//For each optional parameter array we set to null if the parameter wasn't supplied
-		for(var i = 0 ; i < optionalParametersArray; i++ ) {
+		for( let i = 0 ; i < optionalParametersArray; i++ ) {
 			if(!HTTPRequestParameters[optionalParametersArray[i]])
 			{
-				HTTPRequestParameters[optionalParametersArray[i]] == "NULL";
+				HTTPRequestParameters[optionalParametersArray[i]] = "NULL";
 			}
 		}
 
@@ -63,7 +63,7 @@ module.exports =
 
 
 		if(objIdUpdate) {
-			setOfPreparedQueryParameters = ""
+			setOfPreparedQueryParameters = "";
 		}
 
 		else {
@@ -102,25 +102,25 @@ module.exports =
 
 		//We insert the data in the database
 		if(objIdUpdate) {
-			query = "UPDATE " + SQLtable + " " + "SET " + setOfPreparedQueryParameters + " WHERE " + objIdUpdate.id_name + "=" + objIdUpdate.id_to_update + " returning *"
+			query = "UPDATE " + SQLtable + " " + "SET " + setOfPreparedQueryParameters + " WHERE " + objIdUpdate.id_name + "=" + objIdUpdate.id_to_update + " returning *";
 		}
 		else {
 			query = "INSERT INTO " + SQLtable + " " + setOfParameters + " VALUES " + setOfPreparedQueryParameters + " returning *";
 		}
 
-		console.log("API Post = " + query)
+		console.log("API Post = " + query);
 
 		var promise = database.connect( query, parametersValue );
 
 		return promise.then(function(result) {
-			console.log("Returning a promise POST")
+			console.log("Returning a promise POST");
 			console.dir(result);
 			return result;
 		})
 		.catch(function(err) {
-			console.log("Error " + err)
+			console.log("Error " + err);
 			throw(err);
-		})
+		});
 
 }
 

@@ -14,7 +14,7 @@ module.exports =
 	verifyToken : function(token,roleRestriction,idUser) {
 
 		if(!token) {
-			throw ({error : true , error_description : "No token given"})
+			throw ({error : true , error_description : "No token given"});
 		}
 
 		if(token == "ADMIN") {
@@ -31,10 +31,11 @@ module.exports =
 				if(decoded.idCustomer == idUser && decoded.role == "CUSTOMER") {
 					return true;
 				}
-			else if(decode.role == "CUSTOMER") //If a customer try to read something he isn't allowed to
+			}
+			else if(decoded.role == "CUSTOMER") { //If a customer try to read something he isn't allowed to
 				return false;
 			}
-			else if(decode.role == "ADMIN")
+			else if(decoded.role == "ADMIN")
 			{
 				return true;
 			}
@@ -43,4 +44,4 @@ module.exports =
 			}
 		});
 	}
-}
+};

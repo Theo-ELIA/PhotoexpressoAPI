@@ -3,38 +3,40 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var database = require('../function/database');
 var APIget = require('../function/APIget');
+var APIpost = require('../function/APIpost');
 var token = require('../function/token');
 
 
 
+
 //We import the files we need
-var router = express.Router() //This variable represent the routing of our application
+var router = express.Router(); //This variable represent the routing of our application
 
 
 
 router.get('/',function(req,res){
-	res.send('Welcome to users API')
+	res.send('Welcome to users API');
 });
 
 router.post('/connection',function(req,res)
 {
-	var promise_connection = APIget.manageHTTP_GET(["*"],"users.customers",{mail : req.body.mail , password : req.body.password})
+	var promise_connection = APIget.manageHTTP_GET(["*"],"users.customers",{mail : req.body.mail , password : req.body.password});
 
 	promise_connection
 		.then(function(identifier) {
 			if(identifier.length === 1) {
 				var token = jwt.sign({idCustomer : identifier.id, expirationDate : Date.now(), role : "CUSTOMER"},global.PRIVATE_KEY);
-				res.json(token)
+				res.json(token);
 			}
 			else
 			{
-				res.json({ error : true , error_description : "Incorrect credentials"})
+				res.json({ error : true , error_description : "Incorrect credentials"});
 			}
 		})
 		.catch(function(error) {
 			console.log(error);
 			res.status(404);
-		})
+		});
 
 });
 
@@ -43,8 +45,8 @@ router.post('/connection',function(req,res)
 router.get('/listOrders/',function(req,res)
 {
 
-	if(!token.verifyToken(req.headers["token"],"ADMIN")) {
-		res.json({ error : true , error_description : "You don't have the right to see that."})
+	if(!token.verifyToken(req.headers.token,"ADMIN")) {
+		res.json({ error : true , error_description : "You don't have the right to see that."});
 	}
 	else {
 		var query = "SELECT * FROM purchases.old_orders";
@@ -66,7 +68,7 @@ router.get('/listOrders/',function(req,res)
 		.catch(function(err){
 			console.log(err);
 			res.status(405);
-		})
+		});
 	}
 });
 
@@ -80,15 +82,15 @@ router.get('/orders/customer/:idCustomer',function(req,res) {
 		res.json( { error : true , error_description : "The id Account parameter must be an integer"} );
 
 	}
-	idCustomer = parseInt(idCustomer, 10)
-	var promise_order = APIget.manageHTTP_GET(["*"],"purchases.old_orders",{c_id : idCustomer})
+	idCustomer = parseInt(idCustomer, 10);
+	var promise_order = APIget.manageHTTP_GET(["*"],"purchases.old_orders",{c_id : idCustomer});
 	promise_order.then(function(orders) {
 		res.json(orders);
 	})
 	.catch(function(err) {
 		console.log(err);
 		res.status(500);
-	})
+	});
 });
 
 router.get('/order/order/:idOrder',function(req,res) {
@@ -97,20 +99,20 @@ router.get('/order/order/:idOrder',function(req,res) {
 		res.json( { error : true , error_description : "The id Account parameter must be an integer"} );
 
 	}
-	idOrder = parseInt(idOrder, 10)
-	var promise_order = APIget.manageHTTP_GET(["*"],"purchases.old_orders",{ph_id : idOrder})
+	idOrder = parseInt(idOrder, 10);
+	var promise_order = APIget.manageHTTP_GET(["*"],"purchases.old_orders",{ph_id : idOrder});
 	promise_order.then(function(orders) {
 		if(orders.length > 0) {
 			res.json(orders);
 		}
 		else {
-			res.json( { error : true , error_description : "The order doesn't exist"} )
+			res.json( { error : true , error_description : "The order doesn't exist"} );
 		}
 	})
 	.catch(function(err) {
 		console.log(err);
 		res.status(500);
-	})
+	});
 });
 
 //??????????????? ca devrait être dans le fichier purchase
@@ -134,7 +136,7 @@ router.get('/validationMail',function(req,res)
 			res.json(result.rows);
 		}
 
-	}, [email])
+	}, [email]);
 });
 
 router.get('/listAccounts',function(req,res)
@@ -189,7 +191,7 @@ router.get('/account/:idAccount',function(req,res)
 	APIget.manageHTTP_GET(['*'],"users.customers",{ id : idUser })
 		.then(function(result) {
 				console.log(result);
-				if(result.length == 0) 
+				if(result.length === 0)
 				{
 					result = { error : true, error_description : "No was Account found for this ID" };
 				}
@@ -198,7 +200,7 @@ router.get('/account/:idAccount',function(req,res)
 		.catch(function(err)
 		{
 			console.log(err);
-		})
+		});
 });
 
 
@@ -234,7 +236,7 @@ router.post('/deleteAdress/:idAdress',function(req,res)
 
 router.get('/adress/:idAdress',function(req,res)
 {
-	var idAdress = req.params.idAdress
+	var idAdress = req.params.idAdress;
 	if(idAdress != parseInt(idAdress, 10)) {
 		res.json( { error : true , error_description : "The id Adress parameter must be an integer"} );
 	}
@@ -243,7 +245,6 @@ router.get('/adress/:idAdress',function(req,res)
 	APIget.manageHTTP_GET(['*'],"users.adress",{ id : idAdress })
 		.then(function(result) {
 				console.log(result);
-				if(result.length == 0) 
 				{
 					result = { error : true, error_description : "No Adress was found for this ID" };
 				}
@@ -252,7 +253,7 @@ router.get('/adress/:idAdress',function(req,res)
 		.catch(function(err)
 		{
 			console.log(err);
-		})
+		});
 });
 //We export the router so we can use it
 module.exports = router;

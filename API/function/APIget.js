@@ -8,30 +8,30 @@ module.exports =
 	*/
 	manageHTTP_GET : function(selectParametersArray,SQLtable,objIdToSelect) {
 
-		var setOfParameters = "" //Set of the parameters to select
-		var setOfSelectingId = ""
+		var setOfParameters = ""; //Set of the parameters to select
+		var setOfSelectingId = "";
 		var query;
 		if(!selectParametersArray || !SQLtable)
 		{
-			throw { error : "COTOREP"}
+			throw { error : "COTOREP"};
 		}
 
-		for( var i = 0; i < selectParametersArray.length;i++) {
+		for( let i = 0; i < selectParametersArray.length;i++) {
 
 			var parameter = selectParametersArray[i];
 
 			if ( i+1 == selectParametersArray.length ) {
-				setOfParameters = setOfParameters + parameter + " "
+				setOfParameters = setOfParameters + parameter + " ";
 			}
 			else {
-				setOfParameters = setOfParameters + parameter + ","
+				setOfParameters = setOfParameters + parameter + ",";
 			}
 		}
 
 		if(objIdToSelect) {
-			for (var i = 0; i< Object.keys(objIdToSelect).length;i++) {
+			for ( let i = 0; i< Object.keys(objIdToSelect).length; i++ ) {
 				
-				if(i==0) {
+				if( i === 0 ) {
 					setOfSelectingId = setOfSelectingId + "WHERE ";
 				}
 				else {
@@ -48,19 +48,19 @@ module.exports =
 			}
 		}
 		
-		var query = "SELECT " + setOfParameters + " FROM " + SQLtable + " " + setOfSelectingId;
-		console.log("API GET ="+query)
+		query = "SELECT " + setOfParameters + " FROM " + SQLtable + " " + setOfSelectingId;
+		console.log("API GET ="+query);
 
 
 		var promise = database.connect( query );
 
 		return promise
 			.then(function(result) {
-				return result
+				return result;
 			})
 			.catch(function(err) {
-				console.log(err)
+				console.log(err);
 			});
 
 	}
-}
+};

@@ -5,11 +5,11 @@ var express = require('express'); //Framework to create REST API
 var path = require("path"); //Module to generate Path to static files
 var httpProxy = require('http-proxy'); //Module to do reverse proxy
 var argv = require('optimist').argv; //Module to process Console arguments
-const winston = require('winston') // Module to manage logging
+const winston = require('winston'); // Module to manage logging
 //We set the parameters of our application
 
 //Default Mode
-var mode = "debug"
+var mode = "debug";
 
 if(argv.mode) {
 	mode = argv.mode;
@@ -44,10 +44,10 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 var apiProxy = httpProxy.createProxyServer();//We import the file we need
 var apiPath = require('./API/api');
 
-var serverPHPPGAdmin = "http://127.0.0.1:8080"
+var serverPHPPGAdmin = "http://127.0.0.1:8080";
 
-app.use('/outTemp/', express.static(__dirname+'/outTemp'))
-app.use('/API/',apiPath)
+app.use('/outTemp/', express.static(__dirname+'/outTemp'));
+app.use('/API/',apiPath);
 
 
 app.get('/', function (req, res) {
